@@ -1,3 +1,6 @@
+@import "signup";
+@import "variables";
+
 *{
     margin: 0;
     padding: 0;
@@ -8,11 +11,7 @@ body{
 }
 
 //global
-$sm: 576px;
-$md: 768px;
-$lg: 992px;
-$xl: 1200px;
-$xxl: 1400px;
+
 
 .wrapper{
     width: 1200px;

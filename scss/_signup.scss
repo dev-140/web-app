@@ -1,0 +1,62 @@
+@import "variables";
+
+.signup-main-container{
+    display: flex;
+    justify-content: center;
+    
+    .signup-container{
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        margin-top: 100px;
+
+        .text{
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+        
+        .form{
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            align-items: center;
+
+            .input{
+                margin-top: 10px;
+                height: 50px;
+                width: 300px;
+                outline: none;
+                border: solid 2px #000;
+                font-size: 20px;
+                padding: 0 10px 0 10px;
+                border-radius: 10px;
+                font-family: 'Titillium Web', sans-serif;
+                font-weight: bold;
+                @media (max-width: $lg) {
+                    width: 100%;
+                }
+            }
+        }
+
+        button{
+            margin-top: 10px;
+            height: 50px;
+            width: 320px;
+            cursor: pointer;
+            font-family: 'Titillium Web', sans-serif;
+            font-weight: bold;
+            font-size: 20px;
+            background: none;
+            border: solid 2px #000;
+            border-radius: 10px;
+
+            &:hover{
+                background: #000;
+                color: #fff;
+            }
+
+            @media (max-width: $lg) {
+                width: 250px;
+            }
+        }
+    }
+}
