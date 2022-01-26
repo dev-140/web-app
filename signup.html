@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/scss/style.css">
     <title>Expense Tracker</title>
 </head>
@@ -22,7 +23,7 @@
                 <ul class="nav-container">
                     <li><a href="">Help</a></li>
                     <li><a href="">About Us</a></li>
-                    <li id="loginLink"><a href="singup.html">Sign Up</a></li>
+                    <li id="loginLink"><a href="signup.html">Sign Up</a></li>
                     <li id="signupLink"><a href="login.html">Login</a></li>
                     <li><a id="logout">Logout</a></li>
                 </ul>
@@ -33,15 +34,15 @@
     <div class="signup-main-container">
         <div class="wrapper">
             <div class="signup-container slide-left">
-                <h1 class="text">SIGNUP</h1>
+                <h1 class="text" id="signinText"></h1>
 
-                <div class="form">
+                <div class="form" id="signUpForm">
                     <input type="text" placeholder="Username" id="username" class="input username">
                     <input type="text" placeholder="Email" id="email" class="input email">
                     <input type="password" placeholder="Password" id="password" class="input password" required>
                 </div>
 
-                <button type="submit" id="signUp" class="sumbit">Confirm</button>
+                <a href="index.html" type="submit" id="signUp" class="sumbit"></a>
             </div>
         </div>
     </div>
@@ -49,25 +50,27 @@
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js";
-        import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js";
+        import { getDatabase, set, ref} from "https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-auth.js";
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
       
         // Your web app's Firebase configuration
+
         const firebaseConfig = {
-          apiKey: "AIzaSyB561BkfcNKicaRzgZU-pwYvEGDZTHsfRE",
-          authDomain: "login-with-firebase-data-c1bde.firebaseapp.com",
-          projectId: "login-with-firebase-data-c1bde",
-          storageBucket: "login-with-firebase-data-c1bde.appspot.com",
-          messagingSenderId: "247046064164",
-          appId: "1:247046064164:web:051932691751a77da4f0b1"
+            apiKey: "AIzaSyDXERJKM22KNAK_hQwQzLtb2KJAnOOHO5k",
+            authDomain: "login-1874d.firebaseapp.com",
+            databaseURL: "https://login-1874d-default-rtdb.firebaseio.com",
+            projectId: "login-1874d",
+            storageBucket: "login-1874d.appspot.com",
+            messagingSenderId: "626817075962",
+            appId: "1:626817075962:web:2599396a53f2e543ca1743"
         };
       
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
         const auth = getAuth();
+        const database = getDatabase(app);
         
         signUp.addEventListener('click',(e) => {
 
@@ -75,18 +78,18 @@
             var password = document.getElementById('password').value;
             var username = document.getElementById('username').value;
 
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
+            createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
 
             set(ref(database, 'users/' + user.uid),{
                 username: username,
                 email: email
-            });
+            })
+
             alert('user created!');
-            window.location.href = 'index.html';
-            // ...
+            console.log(user);
+            // window.location.href = 'index.html';
             })
             .catch((error) => {
             const errorCode = error.code;
@@ -103,51 +106,31 @@
             });
         });
 
-        // login.addEventListener('click',(e)=>{
-        //     console.log('hello world');
-        //     var email = document.getElementById('email').value;
-        //     var password = document.getElementById('password').value;
-
-        //     signInWithEmailAndPassword(auth, email, password)
-        //     .then((userCredential) => {
-        //         // Signed in 
-        //         const user = userCredential.user;
-
-        //         const dt = new Date();
-        //         update(ref(database, 'users/' + user.uid),{
-        //         last_login: dt,
-        //         })
-
-        //         alert('User loged in!');
-        //         // ...
-        //     })
-        //     .catch((error) => {
-        //         const errorCode = error.code;
-        //         const errorMessage = error.message;
-
-        //         alert(errorMessage);
-        //     });
-
-        // });
-
         const user = auth.currentUser;
             onAuthStateChanged(auth, (user) => { 
-            var logL = document.getElementById('loginLink');
-            var signL = document.getElementById('signupLink');
-            var logout = document.getElementById('logout');
+            var logL = document.getElementById('loginLink'),
+                signL = document.getElementById('signupLink'),
+                logout = document.getElementById('logout');
             
             if (user) {
                 // User is signed in, see docs for a list of available properties
                 console.log('logged in');
                 logL.remove();
                 signL.remove();
-                // window.location.href = 'index.html';
                 const uid = user.uid;
+                document.getElementById('signinText').innerHTML = 'THANKS FOR SIGNING UP';
+                document.getElementById('signUp').innerHTML = 'Go back to home';
+                document.getElementById('signUpForm').classList.add('d-none');
+                document.getElementById('signUp').addEventListener("click", function(){window.location.href = 'index.html';});
                 // https://firebase.google.com/docs/reference/js/firebase.User
                 
             } else {
                 // User is signed out
                 logout.remove();
+                document.getElementById('signinText').innerHTML = 'SIGNUP';
+                document.getElementById('signUp').innerHTML = 'Confirm';
+                document.getElementById('signUpForm').classList.remove('d-none');
+                document.getElementById('signUp').addEventListener("click", function(event){event.preventDefault()});
             }
         });
 

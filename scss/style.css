@@ -1,3 +1,7 @@
+.d-none {
+  display: none !important;
+}
+
 .slide-bottom {
   -webkit-animation: slide-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   animation: slide-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
@@ -77,6 +81,14 @@
 
 .signup-main-container .signup-container .text {
   font-family: 'Roboto Condensed', sans-serif;
+  text-align: center;
+}
+
+@media (max-width: 992px) {
+  .signup-main-container .signup-container .text {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
 }
 
 .signup-main-container .signup-container .form {
@@ -114,9 +126,9 @@
   }
 }
 
-.signup-main-container .signup-container button {
+.signup-main-container .signup-container .sumbit {
   margin-top: 10px;
-  height: 50px;
+  padding: 10px 0 10px 0;
   width: 320px;
   cursor: pointer;
   font-family: 'Titillium Web', sans-serif;
@@ -125,17 +137,24 @@
   background: none;
   border: solid 2px #000;
   border-radius: 10px;
+  text-decoration: none;
+  text-align: center;
+  color: #000;
 }
 
-.signup-main-container .signup-container button:hover {
+.signup-main-container .signup-container .sumbit:hover {
   background: #000;
   color: #fff;
 }
 
 @media (max-width: 992px) {
-  .signup-main-container .signup-container button {
+  .signup-main-container .signup-container .sumbit {
     width: 250px;
   }
+}
+
+.d-none {
+  display: none !important;
 }
 
 .slide-bottom {

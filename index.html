@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/scss/style.css">
     <title>Expense Tracker</title>
 </head>
@@ -22,7 +23,7 @@
                 <ul class="nav-container">
                     <li><a href="">Help</a></li>
                     <li><a href="">About Us</a></li>
-                    <li id="loginLink"><a href="singup.html">Sign Up</a></li>
+                    <li id="loginLink"><a href="signup.html">Sign Up</a></li>
                     <li id="signupLink"><a href="login.html">Login</a></li>
                     <li><a href="" id="logout">Logout</a></li>
                 </ul>
@@ -58,24 +59,26 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-auth.js";
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
-      
-        // Your web app's Firebase configuration
+
+        // Your web app's Firebase configuratio
         const firebaseConfig = {
-          apiKey: "AIzaSyB561BkfcNKicaRzgZU-pwYvEGDZTHsfRE",
-          authDomain: "login-with-firebase-data-c1bde.firebaseapp.com",
-          projectId: "login-with-firebase-data-c1bde",
-          storageBucket: "login-with-firebase-data-c1bde.appspot.com",
-          messagingSenderId: "247046064164",
-          appId: "1:247046064164:web:051932691751a77da4f0b1"
+            apiKey: "AIzaSyDXERJKM22KNAK_hQwQzLtb2KJAnOOHO5k",
+            authDomain: "login-1874d.firebaseapp.com",
+            databaseURL: "https://login-1874d-default-rtdb.firebaseio.com",
+            projectId: "login-1874d",
+            storageBucket: "login-1874d.appspot.com",
+            messagingSenderId: "626817075962",
+            appId: "1:626817075962:web:2599396a53f2e543ca1743"
         };
-      
+
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const auth = getAuth();
 
         const user = auth.currentUser;
-            onAuthStateChanged(auth, (user) => { 
+            
+        onAuthStateChanged(auth, (user) => { 
             var logL = document.getElementById('loginLink');
             var signL = document.getElementById('signupLink');
             var logout = document.getElementById('logout');

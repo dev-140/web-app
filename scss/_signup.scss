@@ -12,6 +12,11 @@
 
         .text{
             font-family: 'Roboto Condensed', sans-serif;
+            text-align: center;
+            @media (max-width: $lg) {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
         }
         
         .form{
@@ -37,9 +42,9 @@
             }
         }
 
-        button{
+        .sumbit{
             margin-top: 10px;
-            height: 50px;
+            padding: 10px 0 10px 0;
             width: 320px;
             cursor: pointer;
             font-family: 'Titillium Web', sans-serif;
@@ -48,6 +53,9 @@
             background: none;
             border: solid 2px #000;
             border-radius: 10px;
+            text-decoration: none;
+            text-align: center;
+            color: #000;
 
             &:hover{
                 background: #000;
