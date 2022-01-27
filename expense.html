@@ -48,17 +48,17 @@
                         </div>
     
                         <div class="input-wrapper">
-                            <input type="number" class="input input-animation billOne" onclick="$(this).next().addClass('slide-top-input');">
+                            <input type="number" class="input input-animation billOne" id="billOne" onclick="$(this).next().addClass('slide-top-input');">
                             <label class="label label-animation">Electric Bill</label>
                         </div>
     
                         <div class="input-wrapper">
-                            <input type="number" class="input input-animation billTwo" onclick="$(this).next().addClass('slide-top-input');">
+                            <input type="number" class="input input-animation billTwo" id="billTwo" onclick="$(this).next().addClass('slide-top-input');">
                             <label class="label label-animation">Water Bill</label>
                         </div>
     
                         <div class="input-wrapper">
-                            <input type="number" class="input input-animation billThree" onclick="$(this).next().addClass('slide-top-input');">
+                            <input type="number" class="input input-animation billThree" id="billThree" onclick="$(this).next().addClass('slide-top-input');">
                             <label class="label label-animation">Internet Bill</label>
                         </div>
                     </div>
@@ -83,10 +83,12 @@
             <div class="wrapper">
                 <div class="pie-container">
                     <div class="pie-text">
-                        <p>SUMMARY</p>
+                        <p class="title">SUMMARY</p>
+
+                        <div class="items-container" id="itemsContainer">
+                            <div class="items">10</div>
+                        </div>
                     </div>
-        
-                    <div id="chartContainer" style="height: 700px; width: 100%;" class="pie"></div>
                 </div>
             </div>
         </div>
@@ -158,16 +160,33 @@
 
                 addData.addEventListener('click', (e) => {
                     const userCredInput = document.getElementById('userCredInput').innerText;
+                    var billOne = document.getElementById('billOne').value;
+                    var billTwo = document.getElementById('billTwo').value;
+                    var billThree = document.getElementById('billThree').value;
                     set(ref(database, 'users-credits/' + user.uid),{
-                        credits: userCredInput,
+                        AbillOne: 'Electric Bill: ' + billOne,
+                        BbbillTwo: 'Water Bill: ' + billTwo,
+                        CbillThree: 'Internet Bill: ' + billThree,
+                        DuserCredInput: 'Total Balance: ' + userCredInput
                     });
 
                     get(child(dbRef, `users-credits/` + user.uid)).then((snapshot) => {
                         if (snapshot.exists()) {
                             console.log(snapshot.val());
                             var text = snapshot.val();
-                            var keys = Object.values(text);
+                            var keys = Object.keys(text);
+                            var values = Object.values(text);
                             console.log('keys' , keys);
+                            console.log(values);
+                            
+                            function displayValues(){
+                                let templateValues = values.map(values => `<div class="items">${values}</div>`).join('\n');
+                                var displayVal = document.getElementById('itemsContainer');
+                                displayVal.innerHTML = templateValues;
+                            }
+
+                            displayValues();
+
                         } else {
                             console.log("No data available");
                         }
