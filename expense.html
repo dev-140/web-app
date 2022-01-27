@@ -10,40 +10,99 @@
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/scss/style.css">
     <title>Expense Tracker</title>
 </head>
 <body>
-    <div class="header-wrapper slide-bottom">
-        <div class="wrapper">
-            <div class="header-main-cotainer">
-                <a href="index.html"><img src="images/logo.png" alt="E-Node's logo" class="logo"></a>
-
-                <ul class="nav-container">
-                    <li><a href="">Help</a></li>
-                    <li><a href="">About Us</a></li>
-                    <li id="loginLink"><a href="signup.html">Sign Up</a></li>
-                    <li id="signupLink"><a href="login.html">Login</a></li>
-                    <li><a href="" id="logout">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="signup-main-container">
-        <div class="wrapper">
-            <div class="signup-container slide-left">
-                <h1 class="text" id="dataText">INPUT DATA</h1>
-
-                <div class="form">
-                    <input type="number" placeholder="P XXX XXX XXX" class="input" id="userCredInput">
+    <div class="bg-color">
+        <div class="header-wrapper-expense slide-bottom">
+            <div class="wrapper">
+                <div class="header-main-cotainer">
+                    <a href="index.html"><img src="images/logo.png" alt="E-Node's logo" class="logo"></a>
+    
+                    <ul class="nav-container">
+                        <li><a href="">Help</a></li>
+                        <li><a href="">About Us</a></li>
+                        <li id="loginLink"><a href="signup.html">Sign Up</a></li>
+                        <li id="signupLink"><a href="login.html">Login</a></li>
+                        <li><a href="" id="logout">Logout</a></li>
+                    </ul>
                 </div>
+            </div>
+        </div>
+    
+        <div class="data-main-container slide-left">
+            <div class="wrapper">
+                <div class="data-container">
+                    <div class="hero-text-container your-element" data-tilt data-tilt-max="50" data-tilt-speed="400" data-tilt-perspective="500">
+                        <h1 class="hero-text" id="userGreet"></h1>
+                        <h2 class="hero-desc">Let's track your expenses</h2>
+                    </div>
+    
+                    <div class="form">
+                        <div class="input-wrapper">
+                            <input type="number" class="input input-animation userAllowance" onclick="$(this).next().addClass('slide-top-input');">
+                            <label class="label label-animation">Allowance per month</label>
+                        </div>
+    
+                        <div class="input-wrapper">
+                            <input type="number" class="input input-animation billOne" onclick="$(this).next().addClass('slide-top-input');">
+                            <label class="label label-animation">Electric Bill</label>
+                        </div>
+    
+                        <div class="input-wrapper">
+                            <input type="number" class="input input-animation billTwo" onclick="$(this).next().addClass('slide-top-input');">
+                            <label class="label label-animation">Water Bill</label>
+                        </div>
+    
+                        <div class="input-wrapper">
+                            <input type="number" class="input input-animation billThree" onclick="$(this).next().addClass('slide-top-input');">
+                            <label class="label label-animation">Internet Bill</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="expense-main-container slide-left">
+            <div class="wrapper">
+                <div class="expense-container">
+                    <button class="calcBtn" id="addData">Calculate</button>
+    
+                    <div class="expense-card-container">
+                        <div class="cards"><p class="text">Your Total Allowance</p> <br> <p class="totalCreds" id="userCredInput">XXX XXX XXX</p></div>
+                        <div class="cards"><p class="text">Your Total Bill</p> <br> <p class="totalBill">XXX XXX XXX</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                <button type="submit" id="addData" class="sumbit">Confirm</button>
+        <div class="pie-main-container">
+            <div class="wrapper">
+                <div class="pie-container">
+                    <div class="pie-text">
+                        <p>SUMMARY</p>
+                    </div>
+        
+                    <div id="chartContainer" style="height: 700px; width: 100%;" class="pie"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tips-main-container">
+            <div class="wrapper">
+                <div class="tips-container">
+                    <div class="tips-heading">
+                        
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
     <script type="module">
         // Import the functions you need from the SDKs you need
@@ -84,8 +143,21 @@
                 signL.remove();
                 const uid = user.uid;
                 console.log(uid);
+
+                get(child(dbRef, `users/` + user.uid)).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            var text = snapshot.val();
+                            var keys = Object.values(text);
+                            document.getElementById('userGreet').innerText = ' ' + (keys [1]);
+                        } else {
+                            console.log("No data available");
+                        }
+                        }).catch((error) => {
+                        console.error(error);
+                    });
+
                 addData.addEventListener('click', (e) => {
-                    const userCredInput = document.getElementById('userCredInput').value;
+                    const userCredInput = document.getElementById('userCredInput').innerText;
                     set(ref(database, 'users-credits/' + user.uid),{
                         credits: userCredInput,
                     });
@@ -94,9 +166,8 @@
                         if (snapshot.exists()) {
                             console.log(snapshot.val());
                             var text = snapshot.val();
-                            let keys = Object.values(text);
+                            var keys = Object.values(text);
                             console.log('keys' , keys);
-                            document.getElementById('dataText').innerText = keys;
                         } else {
                             console.log("No data available");
                         }
@@ -126,6 +197,15 @@
         });
     </script>
 
+    <script type="text/javascript" src="/js/vanilla-tilt.js"></script>
+    <script>
+        VanillaTilt.init(document.querySelector(".your-element"), {
+            max: 25,
+            speed: 600,
+            glare: true,
+            "max-glare": 1,
+	    });
+    </script>
     <script src="js/app.js"></script>
 </body>
 </html>

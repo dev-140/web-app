@@ -1,5 +1,6 @@
 @import "signup";
 @import "variables";
+@import "expense";
 
 *{
     margin: 0;
@@ -8,6 +9,7 @@
 
 body{
     margin: 0;
+    background-color: #ececec;
 }
 
 //global
