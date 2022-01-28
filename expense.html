@@ -29,8 +29,29 @@
                         <li id="signupLink"><a href="login.html">Login</a></li>
                         <li><a href="" id="logout">Logout</a></li>
                     </ul>
+
+                    <img src="/images/icons/menu.png" alt="" class="menu">
                 </div>
             </div>
+        </div>
+
+        <div class="hamburger-menu-container">
+            <div class="header-container">
+                <img src="/images/logo.png" alt="E-Node's logo" class="logo">
+                <img src="/images/icons/exit.png" alt="" class="menu close">
+            </div>
+
+            <div class="total-balance">
+                <p class="balance" id="menuData"></p>
+            </div>
+
+            <ul class="nav-container-hamburger-menu">
+                <li><a href="">Help</a></li>
+                <li><a href="">About Us</a></li>
+                <li id="loginLinkm"><a href="signup.html">Sign Up</a></li>
+                <li id="signupLinkm"><a href="login.html">Login</a></li>
+                <li id="logoutm"><a href="">Logout</a></li>
+            </ul>
         </div>
     
         <div class="data-main-container slide-left">
@@ -72,8 +93,8 @@
                     <button class="calcBtn" id="addData">Calculate</button>
     
                     <div class="expense-card-container">
-                        <div class="cards"><p class="text">Your Total Allowance</p> <br> <p class="totalCreds" id="userCredInput">XXX XXX XXX</p></div>
-                        <div class="cards"><p class="text">Your Total Bill</p> <br> <p class="totalBill">XXX XXX XXX</p></div>
+                        <div class="cards"><p class="text">Your Total Allowance</p> <br> <p class="totalCreds" id="userCredInput">XXX XXX</p></div>
+                        <div class="cards"><p class="text">Your Total Bill</p> <br> <p class="totalBill">XXX XXX</p></div>
                     </div>
                 </div>
             </div>
@@ -86,7 +107,6 @@
                         <p class="title">SUMMARY</p>
 
                         <div class="items-container" id="itemsContainer">
-                            <div class="items">10</div>
                         </div>
                     </div>
                 </div>
@@ -136,33 +156,40 @@
             onAuthStateChanged(auth, (user) => { 
             var logL = document.getElementById('loginLink'),
                 signL = document.getElementById('signupLink'),
-                logout = document.getElementById('logout');
+                logout = document.getElementById('logout'),
+                logLm = document.getElementById('loginLinkm'),
+                signLm = document.getElementById('signupLinkm'),
+                logoutm = document.getElementById('logoutm');
             
             if (user) {
                 // User is signed in, see docs for a list of available properties
                 console.log('logged in');
                 logL.remove();
                 signL.remove();
+                logLm.remove();
+                signLm.remove();
                 const uid = user.uid;
                 console.log(uid);
 
                 get(child(dbRef, `users/` + user.uid)).then((snapshot) => {
-                        if (snapshot.exists()) {
-                            var text = snapshot.val();
-                            var keys = Object.values(text);
-                            document.getElementById('userGreet').innerText = ' ' + (keys [1]);
-                        } else {
-                            console.log("No data available");
-                        }
-                        }).catch((error) => {
-                        console.error(error);
-                    });
+                    if (snapshot.exists()) {
+                        var text = snapshot.val();
+                        var keys = Object.values(text);
+                        document.getElementById('userGreet').innerText = ' ' + (keys [1]);
+                    } else {
+                        console.log("No data available");
+                    }
+
+                }).catch((error) => {
+                    console.error(error);
+                });
 
                 addData.addEventListener('click', (e) => {
                     const userCredInput = document.getElementById('userCredInput').innerText;
                     var billOne = document.getElementById('billOne').value;
                     var billTwo = document.getElementById('billTwo').value;
                     var billThree = document.getElementById('billThree').value;
+                    var menuData = document.getElementById('menuData');
                     set(ref(database, 'users-credits/' + user.uid),{
                         AbillOne: 'Electric Bill: ' + billOne,
                         BbbillTwo: 'Water Bill: ' + billTwo,
@@ -176,8 +203,10 @@
                             var text = snapshot.val();
                             var keys = Object.keys(text);
                             var values = Object.values(text);
-                            console.log('keys' , keys);
+                            var userBal = ('keys' , values[3]);
                             console.log(values);
+                            
+                            menuData.innerHTML = userBal;
                             
                             function displayValues(){
                                 let templateValues = values.map(values => `<div class="items">${values}</div>`).join('\n');
@@ -195,13 +224,58 @@
                     });
                 });
 
+                function my_code(){
+                    get(child(dbRef, `users-credits/` + user.uid)).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            // console.log(snapshot.val());
+                            var text = snapshot.val();
+                            var keys = Object.keys(text);
+                            var values = Object.values(text);
+                            var userBal = ('keys' , values[3]);
+                            // console.log(values);
+                            
+                            menuData.innerHTML = userBal;
+                            
+                            function displayValues(){
+                                let templateValues = values.map(values => `<div class="items">${values}</div>`).join('\n');
+                                var displayVal = document.getElementById('itemsContainer');
+                                displayVal.innerHTML = templateValues;
+                            }
+
+                            displayValues();
+
+                        } else {
+                            console.log("No data available");
+                        }
+                        }).catch((error) => {
+                        console.error(error);
+                    });
+                }
+
+                window.onload=my_code();
+
             } else {
                 // User is signed out
                 logout.remove();
+                logoutm.remove();
             }
         });
 
         logout.addEventListener('click',(e)=>{
+            signOut(auth).then(() => {
+            // Sign-out successful.
+            alert('user loged out');
+            }).catch((error) => {
+            // An error happened.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+                alert(errorMessage);
+            });
+
+        });
+
+        logoutm.addEventListener('click',(e)=>{
             signOut(auth).then(() => {
             // Sign-out successful.
             alert('user loged out');

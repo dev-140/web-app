@@ -233,10 +233,6 @@
 
 @media (max-width: 992px) {
   .header-wrapper-expense .header-main-cotainer {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-flow: column;
-            flex-flow: column;
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
@@ -257,6 +253,12 @@
           align-items: center;
 }
 
+@media (max-width: 992px) {
+  .header-wrapper-expense .header-main-cotainer .nav-container {
+    display: none;
+  }
+}
+
 .header-wrapper-expense .header-main-cotainer .nav-container a {
   text-decoration: none;
   color: #fff;
@@ -264,6 +266,181 @@
   letter-spacing: 1.2px;
   font-size: 20px;
   margin: 10px;
+}
+
+.header-wrapper-expense .header-main-cotainer .menu {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .header-wrapper-expense .header-main-cotainer .menu {
+    display: block;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+}
+
+.hamburger-menu-container {
+  height: 100%;
+  width: 100%;
+  background-color: #8027d4;
+  position: fixed;
+  z-index: 9;
+  -webkit-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out;
+  -webkit-transform: translateX(100vw);
+  transform: translateX(100vw);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+}
+
+.hamburger-menu-container.active {
+  -webkit-animation: slide-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+          animation: slide-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes slide-left {
+  0% {
+    -webkit-transform: translateX(100vw);
+    transform: translateX(100vw);
+  }
+  100% {
+    -webkit-transform: translateX(0px);
+    transform: translateX(0px);
+  }
+}
+
+.hamburger-menu-container.close {
+  -webkit-animation: close 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+          animation: close 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@-webkit-keyframes close {
+  0% {
+    -webkit-transform: translateX(0vw);
+    transform: translateX(0vw);
+  }
+  100% {
+    -webkit-transform: translateX(100vw);
+    transform: translateX(100vw);
+  }
+}
+
+@keyframes close {
+  0% {
+    -webkit-transform: translateX(0vw);
+    transform: translateX(0vw);
+  }
+  100% {
+    -webkit-transform: translateX(100vw);
+    transform: translateX(100vw);
+  }
+}
+
+.hamburger-menu-container .header-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.hamburger-menu-container .header-container .logo {
+  height: 60px;
+  margin-left: 10px;
+}
+
+.hamburger-menu-container .header-container .menu {
+  width: 20px;
+  height: 20px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.hamburger-menu-container .total-balance {
+  margin-top: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  width: 90%;
+}
+
+.hamburger-menu-container .total-balance .balance {
+  font-size: 40px;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+}
+
+.hamburger-menu-container .nav-container-hamburger-menu {
+  list-style: none;
+  text-align: center;
+}
+
+.hamburger-menu-container .nav-container-hamburger-menu li {
+  padding: 20px;
+  background-color: #fff;
+  margin-top: 15px;
+}
+
+.hamburger-menu-container .nav-container-hamburger-menu li.active:nth-child(1) {
+  -webkit-animation: slide-left 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+          animation: slide-left 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.hamburger-menu-container .nav-container-hamburger-menu li.active:nth-child(2) {
+  -webkit-animation: slide-left 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+          animation: slide-left 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.hamburger-menu-container .nav-container-hamburger-menu li.active:nth-child(3) {
+  -webkit-animation: slide-left 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+          animation: slide-left 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.hamburger-menu-container .nav-container-hamburger-menu li.active:nth-child(4) {
+  -webkit-animation: slide-left 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+          animation: slide-left 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes slide-left {
+  0% {
+    -webkit-transform: translateX(1000px);
+    transform: translateX(1000px);
+  }
+  100% {
+    -webkit-transform: translateX(0px);
+    transform: translateX(0px);
+  }
+}
+
+.hamburger-menu-container .nav-container-hamburger-menu li a {
+  color: #000;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
 }
 
 .bg-color {

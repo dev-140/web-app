@@ -15,4 +15,15 @@ $(document).ready(function(){
             $('.totalBill').text(totalBill);
         }
     });
+
+    $('.menu').on('click', (e) => {
+        $('.hamburger-menu-container').addClass('active');
+        $('.nav-container-hamburger-menu li').addClass('active');
+        $('.hamburger-menu-container').removeClass('close');
+    });
+
+    $('.close').on('click', (e) => {
+        $('.hamburger-menu-container').removeClass('active');
+        $('.hamburger-menu-container').addClass('close');
+    });
 });
