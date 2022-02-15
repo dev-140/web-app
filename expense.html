@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/scss/style.css">
     <title>Expense Tracker</title>
@@ -53,48 +54,49 @@
                 <li id="logoutm"><a href="">Logout</a></li>
             </ul>
         </div>
-    
-        <div class="data-main-container slide-left">
-            <div class="wrapper">
-                <div class="data-container">
-                    <div class="hero-text-container your-element" data-tilt data-tilt-max="50" data-tilt-speed="400" data-tilt-perspective="500">
-                        <h1 class="hero-text" id="userGreet"></h1>
-                        <h2 class="hero-desc">Let's track your expenses</h2>
-                    </div>
-    
-                    <div class="form">
-                        <div class="input-wrapper">
-                            <input type="number" class="input input-animation userAllowance" onclick="$(this).next().addClass('slide-top-input');">
-                            <label class="label label-animation">Allowance per month</label>
-                        </div>
-    
-                        <div class="input-wrapper">
-                            <input type="number" class="input input-animation billOne" id="billOne" onclick="$(this).next().addClass('slide-top-input');">
-                            <label class="label label-animation">Electric Bill</label>
-                        </div>
-    
-                        <div class="input-wrapper">
-                            <input type="number" class="input input-animation billTwo" id="billTwo" onclick="$(this).next().addClass('slide-top-input');">
-                            <label class="label label-animation">Water Bill</label>
-                        </div>
-    
-                        <div class="input-wrapper">
-                            <input type="number" class="input input-animation billThree" id="billThree" onclick="$(this).next().addClass('slide-top-input');">
-                            <label class="label label-animation">Internet Bill</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         
         <div class="expense-main-container slide-left">
             <div class="wrapper">
                 <div class="expense-container">
-                    <button class="calcBtn" id="addData">Calculate</button>
-    
                     <div class="expense-card-container">
-                        <div class="cards"><p class="text">Your Total Allowance</p> <br> <p class="totalCreds" id="userCredInput">XXX XXX</p></div>
-                        <div class="cards"><p class="text">Your Total Bill</p> <br> <p class="totalBill">XXX XXX</p></div>
+                        <div class="cards"><p class="text">Your Total Balance</p> <br> <p class="totalCreds" id="userCredInput">0</p></div>
+                        <div class="cards"><p class="text">Your Total Expense</p> <br> <p class="totalBill" id="totalBill">0</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-add-expense-main-container">
+            <div class="wrapper">
+                <div class="data-add-expense-container">
+                    <h1 class="title">Expense</h1>
+
+                    <div class="add-expense-container">
+                        <div class="add-category-container">
+                            <div class="add-category-button">
+                                <p class="text" id="expenseCategory">Category</p>
+                                <img src="/images/arrow-down.png" alt="arrow down" class="arrow-down-category">
+                            </div>
+                            <div class="categories">
+                                <p class="items">Food and Groceries</p>
+                                <p class="items">Rent</p>
+                                <p class="items">Transportation</p>
+                                <p class="items">Travel Expenses</p>
+                                <p class="items">Utility Bills</p>
+                                <p class="items">Cell Phone</p>
+                                <p class="items">Childcare and School Costs</p>
+                                <p class="items">Pet Food and Care</p>
+                                <p class="items">Clothing and Personal Needs</p>
+                                <p class="items">Health Insurance</p>
+                                <p class="items">Entertainment</p>
+                                <p class="items">Credit Card Debt</p>
+                                <p class="items">Emergency Fund</p>
+                            </div>
+                        </div>
+
+                        <input type="number" class="add-expense-value" placeholder="₱" id="expenseValue">
+                        <input type="text" class="expense-desc" placeholder="Description">
+                        <button class="add-expense-data" id="add-expense-data">Add data</button>
                     </div>
                 </div>
             </div>
@@ -171,88 +173,184 @@
                 const uid = user.uid;
                 console.log(uid);
 
-                get(child(dbRef, `users/` + user.uid)).then((snapshot) => {
+                // get(child(dbRef, `users/` + user.uid)).then((snapshot) => {
+                //     if (snapshot.exists()) {
+                //         var text = snapshot.val();
+                //         var keys = Object.values(text);
+                //         document.getElementById('userGreet').innerText = ' ' + (keys [1]);
+                //     } else {
+                //         console.log("No data available");
+                //     }
+
+                // }).catch((error) => {
+                //     console.error(error);
+                // });
+
+                //greet user ^^
+
+                var addExpenseBtn = document.getElementById('add-expense-data');
+
+                //set category
+                addExpenseBtn.addEventListener('click', (e) => {
+                    const expenseCategory = document.getElementById('expenseCategory').innerText;
+                    const expenseValue = document.getElementById('expenseValue').value;
+                    const expenseCategoryValue = expenseCategory + ':' + '<br>' + '- ₱ ' + expenseValue;
+
+                    set(ref(database, 'expenseCategory/' + user.uid + '/' + expenseCategoryValue),{
+                        expenseValue: expenseValue
+                    });
+
+                    get(child(dbRef, `expenseCategory/` + user.uid)).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            var text = snapshot.val();
+                            var keys = Object.keys(text);
+                            var values = Object.values(text);
+                            
+                            function displayValues(){
+                                let templateValues = keys.map(keys => `<div class="items">${keys}</div>`).join('\n');
+                                var displayVal = document.getElementById('itemsContainer');
+                                displayVal.innerHTML = templateValues;
+                            }
+
+                            displayValues();
+
+                        } else {
+                            console.log("No data available");
+                        }
+                    }).catch((error) => {console.error(error);});
+
+                    // calculate total expense
+                    set(ref(database, 'expenseValueTotal/' + user.uid),{
+                        expenseCategory: expenseValue
+                    });
+
+                    get(child(dbRef, `expenseValueTotal/` + user.uid)).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            var text = snapshot.val();
+                            var keys = Object.keys(text);
+                            var values = Object.values(text);
+                            var totalExpenseValue = (values[0]);
+                            var renderExpenseValue =  document.getElementById('totalBill').innerText;
+                            var totalRenderExpense = parseInt(totalExpenseValue) + parseInt(renderExpenseValue);
+                            document.getElementById('totalBill').innerText = totalRenderExpense;
+
+                            // function displayValues(){
+                            //     let templateValues = keys.map(keys => `<div class="items">${keys}</div>`).join('\n');
+                            //     var displayVal = document.getElementById('itemsContainer');
+                            //     displayVal.innerHTML = templateValues;
+                            // }
+
+                            // displayValues();
+
+                        } else {
+                            console.log("No data available");
+                        }
+
+                    }).catch((error) => { console.error(error);});
+
+                    const myTimeout = setTimeout(myGreeting, 100);
+
+                    function myGreeting() {
+                        var renderedTotalExpense = document.getElementById('totalBill').innerText;
+                        set(ref(database, 'expenseRenderValueTotal/' + user.uid),{
+                            expenseTotal: renderedTotalExpense
+                        });
+
+                        get(child(dbRef, `expenseRenderValueTotal/` + user.uid)).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            var text = snapshot.val();
+                            var keys = Object.keys(text);
+                            var values = Object.values(text);
+                            var totalExpenseValue = (values[0]);
+                            document.getElementById('totalBill').innerText = totalExpenseValue;
+                            console.log(totalExpenseValue);
+
+                        } else {
+                            console.log("No data available");
+                        }
+
+                    }).catch((error) => { console.error(error);});
+                    }
+                });
+
+                function my_code(){
+                    get(child(dbRef, `expenseCategory/` + user.uid)).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            var text = snapshot.val();
+                            var keys = Object.keys(text);
+                            var values = Object.values(text);
+                            
+                            function displayValues(){
+                                let templateValues = keys.map(keys => `<div class="items">${keys}</div>`).join('\n');
+                                var displayVal = document.getElementById('itemsContainer');
+                                displayVal.innerHTML = templateValues;
+                            }
+
+                            displayValues();
+
+                        } else {
+                            console.log("No data available");
+                        }
+                        }).catch((error) => {console.error(error);
+                    });
+
+                    get(child(dbRef, `expenseRenderValueTotal/` + user.uid)).then((snapshot) => {
                     if (snapshot.exists()) {
                         var text = snapshot.val();
-                        var keys = Object.values(text);
-                        document.getElementById('userGreet').innerText = ' ' + (keys [1]);
+                        var keys = Object.keys(text);
+                        var values = Object.values(text);
+                        var totalExpenseValue = (values[0]);
+                        document.getElementById('totalBill').innerText = totalExpenseValue;
+                        console.log(totalExpenseValue);
+
                     } else {
                         console.log("No data available");
                     }
 
-                }).catch((error) => {
-                    console.error(error);
-                });
-
-                addData.addEventListener('click', (e) => {
-                    const userCredInput = document.getElementById('userCredInput').innerText;
-                    var billOne = document.getElementById('billOne').value;
-                    var billTwo = document.getElementById('billTwo').value;
-                    var billThree = document.getElementById('billThree').value;
-                    var menuData = document.getElementById('menuData');
-                    set(ref(database, 'users-credits/' + user.uid),{
-                        AbillOne: 'Electric Bill: ' + billOne,
-                        BbbillTwo: 'Water Bill: ' + billTwo,
-                        CbillThree: 'Internet Bill: ' + billThree,
-                        DuserCredInput: 'Total Balance: ' + userCredInput
-                    });
-
-                    get(child(dbRef, `users-credits/` + user.uid)).then((snapshot) => {
-                        if (snapshot.exists()) {
-                            console.log(snapshot.val());
-                            var text = snapshot.val();
-                            var keys = Object.keys(text);
-                            var values = Object.values(text);
-                            var userBal = ('keys' , values[3]);
-                            console.log(values);
-                            
-                            menuData.innerHTML = userBal;
-                            
-                            function displayValues(){
-                                let templateValues = values.map(values => `<div class="items">${values}</div>`).join('\n');
-                                var displayVal = document.getElementById('itemsContainer');
-                                displayVal.innerHTML = templateValues;
-                            }
-
-                            displayValues();
-
-                        } else {
-                            console.log("No data available");
-                        }
-                        }).catch((error) => {
-                        console.error(error);
-                    });
-                });
-
-                function my_code(){
-                    get(child(dbRef, `users-credits/` + user.uid)).then((snapshot) => {
-                        if (snapshot.exists()) {
-                            // console.log(snapshot.val());
-                            var text = snapshot.val();
-                            var keys = Object.keys(text);
-                            var values = Object.values(text);
-                            var userBal = ('keys' , values[3]);
-                            // console.log(values);
-                            
-                            menuData.innerHTML = userBal;
-                            
-                            function displayValues(){
-                                let templateValues = values.map(values => `<div class="items">${values}</div>`).join('\n');
-                                var displayVal = document.getElementById('itemsContainer');
-                                displayVal.innerHTML = templateValues;
-                            }
-
-                            displayValues();
-
-                        } else {
-                            console.log("No data available");
-                        }
-                        }).catch((error) => {
-                        console.error(error);
-                    });
+                    }).catch((error) => { console.error(error);});
                 }
 
                 window.onload=my_code();
+
+                // addData.addEventListener('click', (e) => {
+                //     const userCredInput = document.getElementById('userCredInput').innerText;
+                //     var billOne = document.getElementById('billOne').value;
+                //     var billTwo = document.getElementById('billTwo').value;
+                //     var billThree = document.getElementById('billThree').value;
+                //     var menuData = document.getElementById('menuData');
+                //     set(ref(database, 'users-credits/' + user.uid),{
+                //         AbillOne: 'Electric Bill: ' + billOne,
+                //         BbbillTwo: 'Water Bill: ' + billTwo,
+                //         CbillThree: 'Internet Bill: ' + billThree,
+                //         DuserCredInput: 'Total Balance: ' + userCredInput
+                //     });
+
+                //     get(child(dbRef, `users-credits/` + user.uid)).then((snapshot) => {
+                //         if (snapshot.exists()) {
+                //             console.log(snapshot.val());
+                //             var text = snapshot.val();
+                //             var keys = Object.keys(text);
+                //             var values = Object.values(text);
+                //             var userBal = ('keys' , values[3]);
+                //             console.log(values);
+                            
+                //             menuData.innerHTML = userBal;
+                            
+                //             function displayValues(){
+                //                 let templateValues = values.map(values => `<div class="items">${values}</div>`).join('\n');
+                //                 var displayVal = document.getElementById('itemsContainer');
+                //                 displayVal.innerHTML = templateValues;
+                //             }
+
+                //             displayValues();
+
+                //         } else {
+                //             console.log("No data available");
+                //         }
+                //         }).catch((error) => {
+                //         console.error(error);
+                //     });
+                // });
 
             } else {
                 // User is signed out
